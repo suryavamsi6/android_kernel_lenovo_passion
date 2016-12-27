@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2016, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -53,7 +53,6 @@ struct q_perip_data {
 	uint8_t pol_low;    /* bitmap */
 	uint8_t int_en;     /* bitmap */
 	uint8_t use_count;
-	spinlock_t lock;
 };
 
 struct q_irq_data {
@@ -206,7 +205,7 @@ static void qpnpint_irq_mask(struct irq_data *d)
 	struct q_chip_data *chip_d = irq_d->chip_d;
 	struct q_perip_data *per_d = irq_d->per_d;
 	int rc;
-	uint8_t prev_int_en;
+	uint8_t prev_int_en = per_d->int_en;
 
 	pr_debug("hwirq %lu irq: %d\n", d->hwirq, d->irq);
 
@@ -217,8 +216,6 @@ static void qpnpint_irq_mask(struct irq_data *d)
 		return;
 	}
 
-	spin_lock(&per_d->lock);
-	prev_int_en = per_d->int_en;
 	per_d->int_en &= ~irq_d->mask_shift;
 
 	if (prev_int_en && !(per_d->int_en)) {
@@ -228,7 +225,6 @@ static void qpnpint_irq_mask(struct irq_data *d)
 		 */
 		qpnpint_arbiter_op(d, irq_d, chip_d->cb->mask);
 	}
-	spin_unlock(&per_d->lock);
 
 	rc = qpnpint_spmi_write(irq_d, QPNPINT_REG_EN_CLR,
 					(u8 *)&irq_d->mask_shift, 1);
@@ -255,7 +251,7 @@ static void qpnpint_irq_unmask(struct irq_data *d)
 	struct q_perip_data *per_d = irq_d->per_d;
 	int rc;
 	uint8_t buf[2];
-	uint8_t prev_int_en;
+	uint8_t prev_int_en = per_d->int_en;
 
 	pr_debug("hwirq %lu irq: %d\n", d->hwirq, d->irq);
 
@@ -266,8 +262,6 @@ static void qpnpint_irq_unmask(struct irq_data *d)
 		return;
 	}
 
-	spin_lock(&per_d->lock);
-	prev_int_en = per_d->int_en;
 	per_d->int_en |= irq_d->mask_shift;
 	if (!prev_int_en && per_d->int_en) {
 		/*
@@ -277,7 +271,6 @@ static void qpnpint_irq_unmask(struct irq_data *d)
 		 */
 		qpnpint_arbiter_op(d, irq_d, chip_d->cb->unmask);
 	}
-	spin_unlock(&per_d->lock);
 
 	/* Check the current state of the interrupt enable bit. */
 	rc = qpnpint_spmi_read(irq_d, QPNPINT_REG_EN_SET, buf, 1);
@@ -436,7 +429,6 @@ static struct q_irq_data *qpnpint_alloc_irq_data(
 			rc = -ENOMEM;
 			goto alloc_fail;
 		}
-		spin_lock_init(&per_d->lock);
 		rc = radix_tree_preload(GFP_KERNEL);
 		if (rc)
 			goto alloc_fail;
@@ -606,6 +598,12 @@ static int __qpnpint_handle_irq(struct spmi_controller *spmi_ctrl,
 		       struct qpnp_irq_spec *spec,
 		       bool show)
 {
+	//chenyb1, 20130619, Add log to show MPM irq 62, GIC irq 222 begin
+	#ifdef CONFIG_LENOVO_PM_LOG
+	extern int save_irq_wakeup_gpio(int irq, int gpio);
+	#endif //#ifdef CONFIG_LENOVO_PM_LOG
+	//chenyb1, 20130619, Add log to show MPM irq 62, GIC irq 222 end
+	
 	struct irq_domain *domain;
 	unsigned long hwirq, busno;
 	int irq;
@@ -642,6 +640,29 @@ static int __qpnpint_handle_irq(struct spmi_controller *spmi_ctrl,
 		pr_warn("%d triggered [0x%01x, 0x%02x,0x%01x] %s\n",
 				irq, spec->slave, spec->per, spec->irq, name);
 	} else {
+	//chenyb1, 20130617, Add log to show MPM irq 62, GIC irq 222, START
+#ifdef CONFIG_LENOVO_PM_LOG
+#if 0
+	desc = irq_to_desc(irq);
+	if (desc != NULL) {
+		if (irqd_is_wakeup_set(&desc->irq_data)) {
+			if (save_irq_wakeup(irq)) {
+#ifdef CONFIG_KALLSYMS
+				printk("%s(), irq=%d, %s, handler=(%pS)\n", __func__, irq,
+					desc->action && desc->action->name ? desc->action->name : "",
+					(void *)desc->action->handler);
+#else
+				printk("%s(), irq=%d, %s, handler=0x%08x\n", __func__, irq,
+					desc->action && desc->action->name ? desc->action->name : "",
+					(unsigned int)desc->action->handler);
+#endif
+			}
+		}
+	}
+#endif //0
+		save_irq_wakeup_gpio(irq, 0);
+#endif //#ifdef CONFIG_LENOVO_PM_LOG
+	//chenyb1, 20130619, Add log to show MPM irq 62, GIC irq 222 end
 		generic_handle_irq(irq);
 	}
 

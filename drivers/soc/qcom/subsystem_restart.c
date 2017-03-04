@@ -1477,6 +1477,13 @@ struct subsys_device *subsys_register(struct subsys_desc *desc)
 	subsys->notif_state = -1;
 	subsys->desc->sysmon_pid = -1;
 
+//lenovo sw, yexh1 add for set the modem resart level to RELATED at init
+	if (!strcmp(desc->name, "modem")){
+		subsys->restart_level = RESET_SUBSYS_COUPLED;
+		pr_info("set the %s restart level to RELATED'\n", desc->name);
+	}
+//lenovo sw, yexh1 end
+
 	subsys->notify = subsys_notif_add_subsys(desc->name);
 
 	snprintf(subsys->wlname, sizeof(subsys->wlname), "ssr(%s)", desc->name);

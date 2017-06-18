@@ -1,5 +1,6 @@
-ui_print("Mod     : TestKernel");
-ui_print("Device  : Vibe P1");
+ui_print("Mod     : FireKernel");
+ui_print("Version : v1");
+ui_print("Device  : Vibe P1 / Vibe P1 Turbo");
 assert(getprop("ro.product.device") == "p1a42" ||
        getprop("ro.product.device") == "passion_row" ||
        getprop("ro.product.device") == "p1a41" ||

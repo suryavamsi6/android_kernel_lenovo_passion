@@ -71,6 +71,9 @@ static unsigned long long notrace sched_clock_32(void)
 	u64 cyc;
 	unsigned long seq;
 
+	u32 epoch_cyc;
+	u32 cyc;
+
 	if (cd.suspended)
 		return cd.epoch_ns;
 

@@ -426,7 +426,6 @@ int dwc3_send_gadget_ep_cmd(struct dwc3 *dwc, unsigned ep,
 		if (!(reg & DWC3_DEPCMD_CMDACT)) {
 			dev_vdbg(dwc->dev, "Command Complete --> %d\n",
 					DWC3_DEPCMD_STATUS(reg));
-<<<<<<< HEAD
 			/* SW issues START TRANSFER command to isochronous ep
 			 * with future frame interval. If future interval time
 			 * has already passed when core recieves command, core
@@ -438,11 +437,9 @@ int dwc3_send_gadget_ep_cmd(struct dwc3 *dwc, unsigned ep,
 			else
 				ret = 0;
 			break;
-=======
 			if (DWC3_DEPCMD_STATUS(reg))
 				return -EINVAL;
 			return 0;
->>>>>>> linux/linux-3.10.y
 		}
 
 		/*
@@ -1080,17 +1077,14 @@ static void dwc3_prepare_trbs(struct dwc3_ep *dep, bool starting)
 
 				if (i == (request->num_mapped_sgs - 1) ||
 						sg_is_last(s)) {
-<<<<<<< HEAD
 					unsigned temp = 0;
 					unsigned len;
 					struct dwc3_request *nreq = n;
 					struct usb_request *ureq;
 					bool mpkt = false;
 
-=======
 					if (list_empty(&dep->request_list))
 						last_one = true;
->>>>>>> linux/linux-3.10.y
 					chain = false;
 					if (last_req) {
 						last_one = true;
@@ -1142,11 +1136,7 @@ start_trb_queuing:
 				if (last_one)
 					break;
 			}
-<<<<<<< HEAD
 			dbg_queue(dep->number, &req->request, trbs_left);
-=======
-
->>>>>>> linux/linux-3.10.y
 			if (last_one)
 				break;
 		} else {
@@ -1636,12 +1626,8 @@ static int dwc3_gadget_ep_set_halt(struct usb_ep *ep, int value)
 		goto out;
 	}
 
-<<<<<<< HEAD
 	dbg_event(dep->number, "HALT", value);
-	ret = __dwc3_gadget_ep_set_halt(dep, value);
-=======
 	ret = __dwc3_gadget_ep_set_halt(dep, value, false);
->>>>>>> linux/linux-3.10.y
 out:
 	spin_unlock_irqrestore(&dwc->lock, flags);
 
@@ -2540,19 +2526,6 @@ static int dwc3_cleanup_done_reqs(struct dwc3 *dwc, struct dwc3_ep *dep,
 				break;
 		}while (++i < req->request.num_mapped_sgs);
 
-<<<<<<< HEAD
-		if (req->ztrb) {
-			trb = req->ztrb;
-			if ((event->status & DEPEVT_STATUS_LST) &&
-				(trb->ctrl & (DWC3_TRB_CTRL_LST |
-					DWC3_TRB_CTRL_HWO)))
-				ret = 1;
-
-			if ((event->status & DEPEVT_STATUS_IOC) &&
-					(trb->ctrl & DWC3_TRB_CTRL_IOC))
-				ret = 1;
-		}
-=======
 		/*
 		 * We assume here we will always receive the entire data block
 		 * which we should receive. Meaning, if we program RX to
@@ -2561,7 +2534,6 @@ static int dwc3_cleanup_done_reqs(struct dwc3 *dwc, struct dwc3_ep *dep,
 		 * gadget driver for further processing.
 		 */
 		req->request.actual += req->request.length - count;
->>>>>>> linux/linux-3.10.y
 		dwc3_gadget_giveback(dep, req, status);
 
 		/* EP possibly disabled during giveback? */

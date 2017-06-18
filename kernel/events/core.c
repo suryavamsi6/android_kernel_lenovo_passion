@@ -3588,7 +3588,7 @@ static unsigned int perf_poll(struct file *file, poll_table *wait)
 	return events;
 }
 
-static void _perf_event_reset(struct perf_event *event)
+static void perf_event_reset(struct perf_event *event)
 {
 	(void)perf_event_read(event);
 	local64_set(&event->count, 0);
@@ -3683,25 +3683,26 @@ static int perf_event_set_output(struct perf_event *event,
 				 struct perf_event *output_event);
 static int perf_event_set_filter(struct perf_event *event, void __user *arg);
 
-static long _perf_ioctl(struct perf_event *event, unsigned int cmd,
-			unsigned long arg)
+
+static long perf_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 {
+	struct perf_event *event = file->private_data;
 	void (*func)(struct perf_event *);
 	u32 flags = arg;
 
 	switch (cmd) {
 	case PERF_EVENT_IOC_ENABLE:
-		func = _perf_event_enable;
+		func = perf_event_enable;
 		break;
 	case PERF_EVENT_IOC_DISABLE:
-		func = _perf_event_disable;
+		func = perf_event_disable;
 		break;
 	case PERF_EVENT_IOC_RESET:
-		func = _perf_event_reset;
+		func = perf_event_reset;
 		break;
 
 	case PERF_EVENT_IOC_REFRESH:
-		return _perf_event_refresh(event, arg);
+		return perf_event_refresh(event, arg);
 
 	case PERF_EVENT_IOC_PERIOD:
 		return perf_event_period(event, (u64 __user *)arg);

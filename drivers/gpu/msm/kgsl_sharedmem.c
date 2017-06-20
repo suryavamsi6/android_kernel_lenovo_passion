@@ -597,8 +597,12 @@ _kgsl_sharedmem_page_alloc(struct kgsl_memdesc *memdesc,
 			struct kgsl_pagetable *pagetable,
 			size_t size)
 {
-	int ret = 0;
-	int len, page_size, sglen_alloc, sglen = 0;
+	int pcount = 0, ret = 0;
+	int j, page_size, sglen_alloc, sglen = 0;
+	size_t len;
+	struct page **pages = NULL;
+	pgprot_t page_prot = pgprot_writecombine(PAGE_KERNEL);
+	void *ptr;
 	unsigned int align;
 	int step = ((VMALLOC_END - VMALLOC_START)/8) >> PAGE_SHIFT;
 
@@ -703,24 +707,8 @@ _kgsl_sharedmem_page_alloc(struct kgsl_memdesc *memdesc,
 			goto done;
 		}
 
-		/*
-		 * All memory that goes to the user has to be zeroed out before it gets
-		 * exposed to userspace. This means that the memory has to be mapped in
-		 * the kernel, zeroed (memset) and then unmapped.  This also means that
-		 * the dcache has to be flushed to ensure coherency between the kernel
-		 * and user pages. We used to pass __GFP_ZERO to alloc_page which mapped
-		 * zeroed and unmaped each individual page, and then we had to turn
-		 * around and call flush_dcache_page() on that page to clear the caches.
-		 * Since __GFP_ZERO will kmap_atomic;clear_page;kunmap_atomic it is faster
-		 * to do everything at once here making things faster for all buffer sizes.
-		 */
-		for (j = 0; j < page_size >> PAGE_SHIFT; j++) {
-			struct page *p = nth_page(page, j);
-			void *kaddr = kmap_atomic(p);
-			clear_page(kaddr);
-			dmac_flush_range(kaddr, kaddr + PAGE_SIZE);
-			kunmap_atomic(kaddr);
-		}
+		for (j = 0; j < page_size >> PAGE_SHIFT; j++)
+			pages[pcount++] = nth_page(page, j);
 
 		sg_set_page(&memdesc->sg[sglen++], page, page_size, 0);
 		len -= page_size;

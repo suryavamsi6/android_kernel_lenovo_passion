@@ -30,7 +30,7 @@ yellow='\033[0;33m'
 red='\033[0;31m'
 nocol='\033[0m'
 export ARCH=arm64
-export CROSS_COMPILE=~/android/kernel/toolchain/google-64-4.9/bin/aarch64-linux-android-
+export CROSS_COMPILE=~/android/kernel/toolchain/uber-64-6/bin/aarch64-linux-android-
 export KBUILD_BUILD_USER="haha"
 export KBUILD_BUILD_HOST="FireLord"
 rm -f arch/arm/boot/dts/*.dtb

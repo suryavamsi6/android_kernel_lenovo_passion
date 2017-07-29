@@ -96,4 +96,4 @@ x509.genkey
 # for flashable zip
 #
 arch/arm64/boot/dt.img
-kernel_install
+tmp_mod

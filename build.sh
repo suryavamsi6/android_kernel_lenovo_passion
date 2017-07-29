@@ -9,12 +9,12 @@ red='\033[0;31m'
 nocol='\033[0m'
 
 # Kernel details
-KERNEL_NAME="Boot-test"
-VERSION="v1"
+KERNEL_NAME="FireKernel"
+VERSION="v3"
 DATE=$(date +"%d-%m-%Y-%I-%M")
 DEVICE="p1a42"
 FINAL_ZIP=$KERNEL_NAME-$VERSION-$DATE-$DEVICE.zip
-defconfig=p1a42_defconfig
+defconfig=p1a42-fk_defconfig
 
 # Dirs
 KERNEL_DIR=~/android/kernel/lenovo/p1a42
@@ -26,7 +26,7 @@ DTBTOOL=$KERNEL_DIR/tools/dtbToolCM
 
 # Export
 export ARCH=arm64
-export CROSS_COMPILE=~/android/kernel/toolchain/google-64-4.9/bin/aarch64-linux-android-
+export CROSS_COMPILE=~/android/kernel/toolchain/uber-64-6/bin/aarch64-linux-android-
 export KBUILD_BUILD_USER="haha"
 export KBUILD_BUILD_HOST="FireLord"
 

@@ -12,12 +12,12 @@ nocol='\033[0m'
 KERNEL_NAME="Boot-test"
 VERSION="v1"
 DATE=$(date +"%d-%m-%Y-%I-%M")
-DEVICE="p1a42"
+DEVICE="passion"
 FINAL_ZIP=$KERNEL_NAME-$VERSION-$DATE-$DEVICE.zip
-defconfig=p1a42_defconfig
+defconfig=passion_defconfig
 
 # Dirs
-KERNEL_DIR=~/android/kernel/lenovo/p1a42
+KERNEL_DIR=~/android/kernel/lenovo/passion
 ANYKERNEL_DIR=$KERNEL_DIR/AnyKernel2
 KERNEL_IMG=$KERNEL_DIR/arch/arm64/boot/Image
 DT_IMAGE=$KERNEL_DIR/arch/arm64/boot/dt.img

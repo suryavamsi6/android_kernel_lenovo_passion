@@ -26,9 +26,9 @@ DTBTOOL=$KERNEL_DIR/tools/dtbToolCM
 
 # Export
 export ARCH=arm64
-export CROSS_COMPILE=$KERNEL_DIR/toolchain-4.9/bin/aarch64-linux-android-
-export KBUILD_BUILD_USER="haha"
-export KBUILD_BUILD_HOST="FireLord"
+export CROSS_COMPILE=$KERNEL_DIR/toolchain/aarch64-linux-android-4.9/bin/aarch64-linux-android-
+export KBUILD_BUILD_USER="Surya Vamsi"
+export KBUILD_BUILD_HOST="Jarvis"
 
 ## Functions ##
 

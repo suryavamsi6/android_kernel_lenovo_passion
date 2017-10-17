@@ -125,6 +125,11 @@ config CPU_FREQ_DEFAULT_GOV_SMARTASS2
  	   Use the CPUFreq governor 'smartassV2' as default, tweaked for
  	   GT-S7262.
 
+config CPU_FREQ_DEFAULT_GOV_PEGASUSQ
+ 	bool "pegasusq"
+        select CPU_FREQ_GOV_PEGASUSQ
+ 
+
 endchoice
 
 config CPU_FREQ_GOV_PERFORMANCE
@@ -231,6 +236,10 @@ config CPU_FREQ_GOV_SMARTASS2
  	   GT-S7262!
  
  	   If in doubt, say N.
+
+config CPU_FREQ_GOV_PEGASUSQ
+        tristate "'pegasusq' cpufreq policy governor"
+ 
 
 config CPU_BOOST
 	tristate "Event base short term CPU freq boost"

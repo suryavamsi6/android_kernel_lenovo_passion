@@ -1,0 +1,20 @@
+image: ubuntu:16.04
+
+before_script:
+  - apt-get update --quiet
+  - apt-get install --yes build-essential gcc-multilib bc kernel-package libncurses5-dev bzip2
+  - chmod +x build.sh
+  - chmod +x AnyKernel2/tools/dtbToolCM
+  - mkdir Builds
+
+stages:
+  - build
+
+build:
+  stage: build
+  script:
+    - ./build.sh
+  artifacts:
+    paths:
+    - Builds
+    expire_in: 1 week

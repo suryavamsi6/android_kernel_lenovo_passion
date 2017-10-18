@@ -467,7 +467,7 @@ static void dbs_check_cpu(struct cpu_dbs_info_s *this_dbs_info)
 
 		load = 100 * (wall_time - idle_time) / wall_time;
 
-		freq_avg = __cpufreq_driver_getavg(policy, j);
+		//freq_avg = __cpufreq_driver_getavg(policy, j);
 		if (freq_avg <= 0)
 			freq_avg = policy->cur;
 
@@ -552,7 +552,7 @@ static void dbs_check_cpu(struct cpu_dbs_info_s *this_dbs_info)
 	}
 }
 
-static void do_dbs_timer(struct work_struct *work)
+/*static void do_dbs_timer(struct work_struct *work)
 {
 	struct cpu_dbs_info_s *dbs_info =
 		container_of(work, struct cpu_dbs_info_s, work.work);
@@ -564,7 +564,7 @@ static void do_dbs_timer(struct work_struct *work)
 	dbs_check_cpu(dbs_info);
 	/* We want all CPUs to do sampling nearly on
 	 * same jiffy
-	 */
+	 *//*
 	delay = usecs_to_jiffies(dbs_tuners_ins.sampling_rate
 				 * dbs_info->rate_mult);
 
@@ -573,7 +573,7 @@ static void do_dbs_timer(struct work_struct *work)
 
 	schedule_delayed_work_on(cpu, &dbs_info->work, delay);
 	mutex_unlock(&dbs_info->timer_mutex);
-}
+}*/
 
 static inline void dbs_timer_init(struct cpu_dbs_info_s *dbs_info)
 {
@@ -584,7 +584,7 @@ static inline void dbs_timer_init(struct cpu_dbs_info_s *dbs_info)
 	if (num_online_cpus() > 1)
 		delay -= jiffies % delay;
 
-	INIT_DELAYED_WORK_DEFERRABLE(&dbs_info->work, do_dbs_timer);
+	/*INIT_DELAYED_WORK_DEFERRABLE(&dbs_info->work, do_dbs_timer);*/
 
 	schedule_delayed_work_on(dbs_info->cpu, &dbs_info->work, delay);
 }

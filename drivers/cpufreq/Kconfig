@@ -121,6 +121,11 @@ config CPU_FREQ_DEFAULT_GOV_INTERACTIVE
 config CPU_FREQ_DEFAULT_GOV_INTELLIACTIVE
  	bool "intelliactive"
         select CPU_FREQ_GOV_INTELLIACTIVE
+
+config CPU_FREQ_DEFAULT_GOV_BLU_ACTIVE
+ 	bool "blu_active"
+        select CPU_FREQ_GOV_BLU_ACTIVE
+ 
  
 
 endchoice
@@ -223,6 +228,9 @@ config CPU_FREQ_GOV_CONSERVATIVE
 
 config CPU_FREQ_GOV_INTELLIACTIVE
         tristate "'intelliactive' cpufreq policy governor"
+
+config CPU_FREQ_GOV_BLU_ACTIVE
+        tristate "'blu_active' cpufreq policy governor"
  
 
 config CPU_BOOST

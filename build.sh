@@ -9,12 +9,12 @@ red='\033[0;31m'
 nocol='\033[0m'
 
 # Kernel details
-KERNEL_NAME="Boot-test"
+KERNEL_NAME="Dragon-Kernel"
 VERSION="v1"
 DATE=$(date +"%d-%m-%Y-%I-%M")
 DEVICE="p1a42"
 FINAL_ZIP=$KERNEL_NAME-$VERSION-$DATE-$DEVICE.zip
-defconfig=passion_defconfig
+defconfig=dragon_defconfig
 
 # Dirs
 KERNEL_DIR=$PWD
@@ -24,9 +24,9 @@ DT_IMAGE=$KERNEL_DIR/arch/arm64/boot/dt.img
 UPLOAD_DIR=~/Android/Kernel/upload/$DEVICE
 DTBTOOL=$KERNEL_DIR/tools/dtbToolCM
 
-# Export
+## Export ##
 export ARCH=arm64
-export CROSS_COMPILE=$KERNEL_DIR/toolchain/aarch64-linux-android-4.9/bin/aarch64-linux-android-
+export CROSS_COMPILE=$KERNEL_DIR/toolchain/aarch64-linux-android-4.9/bin/aarch64-linux-android-  
 export KBUILD_BUILD_USER="Surya Vamsi"
 export KBUILD_BUILD_HOST="Jarvis"
 
@@ -84,8 +84,8 @@ echo -e "$cyan***********************************************"
   echo -e " 2.Get kernel only"
   echo -n " Your choice : ? "
   read ziporkernel
-  ch=2
-  ziporkernel=1
+ // ch=2
+  //ziporkernel=1
 
 case $ch in
   1) echo -e "$cyan***********************************************"

@@ -21,12 +21,12 @@ KERNEL_DIR=$PWD
 ANYKERNEL_DIR=$KERNEL_DIR/AnyKernel2
 KERNEL_IMG=$KERNEL_DIR/arch/arm64/boot/Image
 DT_IMAGE=$KERNEL_DIR/arch/arm64/boot/dt.img
-UPLOAD_DIR=~/Android/Kernel/upload/$DEVICE
+UPLOAD_DIR=~/Android/Kernel/Builds/$DEVICE
 DTBTOOL=$KERNEL_DIR/tools/dtbToolCM
 
 ## Export ##
 export ARCH=arm64
-export CROSS_COMPILE=$KERNEL_DIR/toolchain/aarch64-linux-android-4.9/bin/aarch64-linux-android-  
+export CROSS_COMPILE=$KERNEL_DIR/aarch64-linux-android-4.9/bin/aarch64-linux-android-  
 export KBUILD_BUILD_USER="Surya Vamsi"
 export KBUILD_BUILD_HOST="Jarvis"
 

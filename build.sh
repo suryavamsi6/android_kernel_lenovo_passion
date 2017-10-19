@@ -84,8 +84,8 @@ echo -e "$cyan***********************************************"
   echo -e " 2.Get kernel only"
   echo -n " Your choice : ? "
   read ziporkernel
- // ch=2
-  //ziporkernel=1
+  ch=2
+  ziporkernel=1
 
 case $ch in
   1) echo -e "$cyan***********************************************"
